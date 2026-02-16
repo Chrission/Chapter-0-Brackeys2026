@@ -32,7 +32,7 @@ func _ready():
 # Calls when there is some input that hasn't been consumed by one of the other input items
 func _input(event):
 	# If event is mouse movement, then activate our camera controls
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		# Rotate the camera/head based on the event's relative input from our mouse multiplied by our const sensitivity
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
@@ -41,6 +41,12 @@ func _input(event):
 		# Controls head horizontal clamp, -75 is min, 75 is max, can be adjusted
 		# Issues where head can't turn any farther, must fix later head.rotation.y = clamp(head.rotation.y, deg_to_rad(-75), deg_to_rad(75))
 
+	if event is InputEventKey and event.pressed:
+		if event.keycode == Key.KEY_ESCAPE:
+			if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			else:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta):
 	# Add the gravity.

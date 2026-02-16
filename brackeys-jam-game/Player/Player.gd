@@ -26,9 +26,11 @@ const FOV_CHANGE = 1.5
 func _ready():
 	# Gets our mouse input ready
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	$MeshInstance3D.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
 
 # Calls when there is some input that hasn't been consumed by one of the other input items
-func _unhandled_input(event):
+func _input(event):
 	# If event is mouse movement, then activate our camera controls
 	if event is InputEventMouseMotion:
 		# Rotate the camera/head based on the event's relative input from our mouse multiplied by our const sensitivity

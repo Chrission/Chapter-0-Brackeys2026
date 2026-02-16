@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bj4qkgseherrg"]
+
+[ext_resource type="Script" uid="uid://c0xqniuxdnpmy" path="res://Player/Player.gd" id="1_mnvsm"]
+[ext_resource type="Script" uid="uid://dmh8pewrfp6j5" path="res://Player/Interaction/PlayerInteractionHandler.gd" id="2_5w5p4"]
+[ext_resource type="Script" uid="uid://bnb3ihduj6fyk" path="res://Inventory/ItemData.gd" id="3_2i2gn"]
+[ext_resource type="PackedScene" uid="uid://jvnxg85sghm0" path="res://Items/Base/test_cube.tscn" id="4_svcix"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_8o3pk"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_i0c0f"]
+points = PackedVector3Array(-0.12520654, -0.532801, -0.4805069, 0.022783129, 0.4760704, 0.49888408, 0.16971254, 0.5591441, 0.46417162, 0.23105091, -0.8035912, 0.32045516, 0.40741014, 0.651043, -0.24352328, -0.4827893, 0.59484255, 0.082213186, -0.3628679, -0.68231165, 0.2896967, 0.46904355, -0.65452886, -0.06627126, -0.12744367, 0.8427015, -0.33810276, -0.39343542, -0.6839421, -0.24471663, 0.43825462, 0.62330925, 0.20084947, 0.0841477, 0.977454, 0.11479468, -0.06820232, -0.9764576, -0.12927033, 0.20054972, -0.56312895, -0.4514544, -0.18552664, 0.59545326, -0.4534751, -0.27336287, 0.59226835, 0.40775412, -0.0069364863, -0.47682306, 0.49966025, 0.37582088, -0.5886136, 0.31695515, 0.111579016, 0.5630594, -0.48117727, -0.41725034, 0.5278656, -0.27049688, -0.48454633, -0.59697217, -0.06650971, -0.27974695, 0.90856135, 0.05333608, -0.25019687, -0.8807117, 0.20531891, 0.263647, -0.90277094, -0.1273943, 0.29336792, 0.8715263, -0.15719566, 0.3734115, -0.5263189, -0.32824618, 0.4996626, 0.47664148, -0.0068885577, 0.053105574, 0.8750009, 0.32470253, -0.15454252, -0.5908538, 0.4658794, -0.09727988, -0.7823577, -0.39818847, -0.3876489, -0.49817133, 0.31564978, -0.30067965, -0.58799505, -0.38890144)
+
+[sub_resource type="Resource" id="Resource_svcix"]
+script = ExtResource("3_2i2gn")
+ItemName = "Test Cube"
+ItemModelPrefab = ExtResource("4_svcix")
+metadata/_custom_type_script = "uid://bnb3ihduj6fyk"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g6slo"]
+radius = 2.0
+
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=928906355]
+script = ExtResource("1_mnvsm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1443051115]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_8o3pk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1533939735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("ConvexPolygonShape3D_i0c0f")
+
+[node name="Head" type="Node3D" parent="." unique_id=741672863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6292338, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=123205562]
+
+[node name="InteractionArea" type="Area3D" parent="." unique_id=1019436578]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_5w5p4")
+ItemTypes = Array[ExtResource("3_2i2gn")]([SubResource("Resource_svcix")])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea" unique_id=1107825907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_g6slo")
+
+[connection signal="body_entered" from="InteractionArea" to="InteractionArea" method="OnObjectEnteredArea"]
+[connection signal="body_exited" from="InteractionArea" to="InteractionArea" method="OnObjectExitedArea"]

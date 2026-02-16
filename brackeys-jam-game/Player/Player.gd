@@ -6,7 +6,7 @@ var jump_velocity
 const WALK_SPEED = 4.0
 const SPRINT_SPEED = 6.5
 const WALK_JUMP_VELOCITY = 3.5
-const SPRINT_JUMP_VELOCITY = 4.5
+const SPRINT_JUMP_VELOCITY = 4.0
 const SENSITIVITY = 0.001
 
 # Bob Variables

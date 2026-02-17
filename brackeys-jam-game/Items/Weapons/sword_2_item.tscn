@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dchtt5p3o28wn"]
+
+[ext_resource type="ArrayMesh" uid="uid://cxhp7hmiqi4u3" path="res://Items/Weapons/Sword-2_Cube_001.res" id="1_gjwrv"]
+[ext_resource type="Script" uid="uid://cytmp28f6bp24" path="res://Inventory/InteractableItem.gd" id="1_sm65r"]
+
+[node name="Sword2Item" type="RigidBody3D" unique_id=188554618 node_paths=PackedStringArray("ItemHihglightMesh")]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_sm65r")
+ItemHihglightMesh = NodePath("MeshInstance3D/Outline")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1212418783]
+mesh = ExtResource("1_gjwrv")
+
+[node name="Outline" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1420999899]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1883882649]

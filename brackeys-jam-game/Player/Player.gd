@@ -22,6 +22,19 @@ const FOV_CHANGE = 1.5
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 
+# Variables for handling the holding and throwing of objects
+@export_category("Holding Objects")
+@export var throwForce = 7.5
+@export var followSpeed = 5.0
+@export var followDistance = 2.5
+@export var maxDistanceFromCamera = 5.0
+@export var dropBelowPlayer = false
+@export var groundRay: RayCast3D
+
+@onready var interactRay = $Head/Camera3D/InteractRay
+var heldObject: RigidBody3D
+
+
 # Calls when node is "Ready"
 func _ready():
 	# Gets our mouse input ready
@@ -49,6 +62,9 @@ func _input(event):
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta):
+	# held object handling
+	handle_holding_objects()
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -98,3 +114,47 @@ func _headbob(time) -> Vector3:
 	pos.y = sin(time * BOB_FREQ) * BOB_AMP
 	pos.x = cos(time * BOB_FREQ / 2) * BOB_AMP
 	return pos
+
+# series of functions focused on item interactivity (from the "Picking Up, Dropping and Throwing Physics Objects" tutorial
+func set_held_object(body: RigidBody3D):
+	heldObject = body
+
+func drop_held_object():
+	heldObject = null
+
+func throw_held_object():
+	var obj = heldObject
+	drop_held_object()
+	obj.apply_central_impulse(-camera.global_transform.basis.z * throwForce * 10)
+
+# General interactivity function
+func handle_holding_objects():
+	# If: the player has an item, and they press the "throw" button while holding an item,
+	# Then: throw
+	if Input.is_action_just_pressed("throw"):
+		if heldObject != null:
+			throw_held_object()
+	# If: the player presses the "interact" button
+	# Then If: the player is holding an onject
+	# Then: drop item
+	# Else If: the player had an item infront of them
+	# Then: hold the object
+	if Input.is_action_just_pressed("interact"):
+		if heldObject != null: drop_held_object()
+		elif interactRay.is_colliding():
+			set_held_object(interactRay.get_collider())
+	# If: the player is holding an object
+	# Then: give the item a velocity relative to the player
+	if heldObject != null:
+		var targetPos = camera.global_transform.origin + (camera.global_basis * Vector3(0, 0, -followDistance))
+		var objectPos = heldObject.global_transform.origin
+		heldObject.linear_velocity = (targetPos - objectPos) * followSpeed
+		# If: the held item gets too far away
+		# Then: drop item
+		if heldObject.global_position.distance_to(camera.global_position) > maxDistanceFromCamera:
+			drop_held_object()
+		# If: dropBelowPlayer is enabled, and something is beneath the player
+		# Then If: the object below the player is the held item
+		# Then: drop item
+		if dropBelowPlayer && groundRay.is_colliding():
+			if groundRay.get_collider() == heldObject: drop_held_object()

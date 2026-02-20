@@ -11,6 +11,7 @@ points = PackedVector3Array(-0.12520654, -0.532801, -0.4805069, 0.022783129, 0.4
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=928906355]
 script = ExtResource("1_mnvsm")
+throwForce = 5.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1443051115]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -24,19 +25,41 @@ shape = SubResource("ConvexPolygonShape3D_i0c0f")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6292338, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=123205562]
+cull_mask = 1048573
 
 [node name="InteractRay" type="RayCast3D" parent="Head/Camera3D" unique_id=905602206]
 target_position = Vector3(0, 0, -2.5)
 
-[node name="left_pivot" type="Node3D" parent="Head/Camera3D" unique_id=1924347270]
-
-[node name="hand-left" parent="Head/Camera3D/left_pivot" unique_id=1086792429 instance=ExtResource("2_5w5p4")]
+[node name="hand-left" parent="Head/Camera3D" unique_id=1086792429 instance=ExtResource("2_5w5p4")]
 transform = Transform3D(-0.037488375, -0.7680488, 0.639293, -0.044961426, 0.64039123, 0.7667317, -0.99828506, 0, -0.0585398, -0.4650193, -0.40553427, -0.6995214)
 
-[node name="right_pivot" type="Node3D" parent="Head/Camera3D" unique_id=352730956]
+[node name="Hand" parent="Head/Camera3D/hand-left" index="0" unique_id=1056889915]
+layers = 2
 
-[node name="hand-right" parent="Head/Camera3D/right_pivot" unique_id=1731560486 instance=ExtResource("3_2i2gn")]
-transform = Transform3D(0.0011759015, 0.5222158, 0.8528125, -0.0007200571, 0.85281336, -0.5222153, -0.99999905, 0, 0.0013788497, 0.50992286, -0.34875464, -0.84119725)
+[node name="hand-right" parent="Head/Camera3D" unique_id=1731560486 instance=ExtResource("3_2i2gn")]
+transform = Transform3D(0.0010637708, 0.6362399, 0.7714907, -0.0008772792, 0.77149147, -0.6362393, -0.99999905, -4.964027e-11, 0.0013788497, 0.38695532, -0.42435908, -0.76504886)
+
+[node name="Hand" parent="Head/Camera3D/hand-right" index="0" unique_id=50602296]
+layers = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Head/Camera3D" unique_id=1083097318]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="Head/Camera3D/SubViewportContainer" unique_id=1507502558]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="HandCam" type="Camera3D" parent="Head/Camera3D/SubViewportContainer/SubViewport" unique_id=193929955]
+cull_mask = 2
 
 [node name="GroundRay" type="RayCast3D" parent="." unique_id=1686207645]
 target_position = Vector3(0, -0.1, 0)
+
+[editable path="Head/Camera3D/hand-left"]
+[editable path="Head/Camera3D/hand-right"]

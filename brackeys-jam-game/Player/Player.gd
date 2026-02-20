@@ -7,6 +7,7 @@ const WALK_SPEED = 4.0
 const SPRINT_SPEED = 6.5
 const WALK_JUMP_VELOCITY = 3.5
 const SPRINT_JUMP_VELOCITY = 4.0
+const THROW_MULTIPLIER = 5.0
 const SENSITIVITY = 0.001
 
 # Bob Variables
@@ -21,6 +22,8 @@ const FOV_CHANGE = 1.5
 # Loads right before the node enters "Ready" state, path linked to head and camera in Godot
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
+@onready var handcam = $Head/Camera3D/SubViewportContainer/SubViewport/HandCam
+
 
 # Variables for handling the holding and throwing of objects
 @export_category("Holding Objects")
@@ -59,6 +62,9 @@ func _input(event):
 	#			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	#		else:
 	#			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _process(delta):
+	handcam.global_transform = camera.global_transform
 
 func _physics_process(delta):
 	# held object handling
@@ -99,6 +105,7 @@ func _physics_process(delta):
 	# Head Bob
 	t_bob += delta * velocity.length() * float(is_on_floor())
 	camera.transform.origin = _headbob(t_bob)
+	
 
 	# FOV
 	var velocity_clamped = clamp(velocity.length(), 0.5, SPRINT_SPEED * 2)
@@ -124,7 +131,7 @@ func drop_held_object():
 func throw_held_object():
 	var obj = heldObject
 	drop_held_object()
-	obj.apply_central_impulse(-camera.global_transform.basis.z * throwForce * 10)
+	obj.apply_central_impulse(-camera.global_transform.basis.z * throwForce * THROW_MULTIPLIER)
 
 # General interactivity function
 func handle_holding_objects():

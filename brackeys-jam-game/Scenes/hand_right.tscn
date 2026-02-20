@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://whq833tayfgg"]
+
+[ext_resource type="PackedScene" uid="uid://cyb4j5avrxnr1" path="res://3DAssets/GLP/Player/hand-right.glb" id="1_k1ef6"]
+
+[node name="hand-right" unique_id=1731560486 instance=ExtResource("1_k1ef6")]

@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="BrackeysJamGame"
-run/main_scene="uid://dm3hsc80vhooq"
+run/main_scene="uid://cgu57i0tvcogf"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
